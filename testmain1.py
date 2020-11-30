@@ -6,7 +6,6 @@ s=serial.Serial('/dev/ttyUSB0',9600)
 host = "broker.hivemq.com"
 port = 1883
 interval = 600
-topic = "IoT_BT"
 topic1="IoT_BT1"
 topic2="IoT_BT2"
 
@@ -26,8 +25,7 @@ def receive_arduino():
 def on_connect(client, userdata, flags, rc): 
     print("Connected with result code {0}".format(str(rc)))  
     client.subscribe(topic1)
-    client.subscribe(topic2)
-    client.publish(topic,receive_arduino())
+    client.publish(topic2,receive_arduino())
 
 def on_message(client, userdata, msg):  
     #print("Message :" + msg.topic + " " + str(msg.payload))  
