@@ -20,17 +20,30 @@ void setup() {
   serialData.reserve(200);
 }
 
-void procesSerialData() {
+void procesSerialData() 
+{
     Serial.print("Data " + serialData);
-    if (serialData == "1") {    
+    if (serialData == "led1ON") 
+    {    
         digitalWrite(light, HIGH);
-    } else {
+    } 
+    else if(serialData=="led1OFF")
+    {
         digitalWrite(light, LOW);
     }
+//    else if (serialData == "led2ON") 
+//    {    
+//        digitalWrite(light, HIGH);
+//    } 
+//    else if(serialData=="led2OFF")
+//    {
+//        digitalWrite(light, LOW);
+//    }
     serialData = "";
     onSerialRead = false;
 }
-void loop() {
+void loop() 
+{
   float h = dht.readHumidity();    
   float t = dht.readTemperature();
   if(digitalRead(irsensor)==0)
@@ -57,14 +70,18 @@ void loop() {
   Serial.println(t);
   Serial.print("H:");
   Serial.println(h);
-   if (onSerialRead) {
+   if (onSerialRead) 
+   {
         procesSerialData();
     }
 }
-void serialEvent() {
-    while (Serial.available()) {
+void serialEvent() 
+{
+    while (Serial.available()) 
+    {
         char inChar = (char)Serial.read();
-        if (inChar == '\n') {
+        if (inChar == '\n') 
+        {
             onSerialRead = true;
         } else {
             serialData += inChar;
