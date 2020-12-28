@@ -11,6 +11,8 @@
   const int rain=8;
   const int switch1=9;
   const int switch2=10;
+  const int lightsensor=A1;
+  const int lslight=A2;
   LiquidCrystal_I2C lcd(0x27,16,2);
   DHT dht(dht1, DHT11);
   String serialData="";
@@ -45,6 +47,9 @@ void setup() {
   pinMode(switch1, INPUT);
   pinMode(switch2, INPUT);
   pinMode(rain, INPUT);
+  pinMode(lightsensor,INPUT);
+  pinMode(lslight,OUTPUT);
+  
   serialData.reserve(200);
 }
 
@@ -75,28 +80,39 @@ void procesSerialData()
     serialData = "";
     onSerialRead = false;
 }
+//Dieu chinh den bang nut nhan
 void led()
-{
-  if(digitalRead(switch2)==0)
-  {
+{ 
+   if(digitalRead(switch2)==0)
+   {
     digitalWrite(light, LOW);
    }
-  if(digitalRead(switch2)==1)
-  {
+   if(digitalRead(switch2)==1)
+   {
     digitalWrite(light, HIGH);
    }
    if(digitalRead(switch1)==0)
-  {
+   {
     digitalWrite(fan, LOW);
    }
    if(digitalRead(switch1)==1)
-  {
+   {
     digitalWrite(fan, HIGH);
    }
    
   }
+  
 void loop() 
 {
+  if(digitalRead(lightsensor)==1)
+  {
+    digitalWrite(lslight,HIGH);
+   }
+  else if(digitalRead(lightsensor)==0)
+  {
+    digitalWrite(lslight,LOW);
+   }
+   
   float h = dht.readHumidity();    
   float t = dht.readTemperature();
   //LCD
@@ -133,23 +149,23 @@ void loop()
   {
     digitalWrite(buzzer,LOW);
   }
-  
+  float rain1=digitalRead(rain);
+  Serial.print("R:");
+  Serial.println(rain1);
   Serial.print("G:");
   Serial.println(analogRead(gas));
   Serial.print("T:");
   Serial.println(t);
   Serial.print("H:");
   Serial.println(h);
-  Serial.print("R:");
-  Serial.println(digitalRead(rain));
    if (onSerialRead) 
    {
-        procesSerialData();
-    }
-   else if(!onSerialRead)
-   {
-    led();
-    }
+      procesSerialData();
+   }
+//   else if(!onSerialRead)
+//   {
+//      led();
+//   }
 }
 void serialEvent() 
 {
